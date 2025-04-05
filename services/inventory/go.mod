@@ -1,6 +1,6 @@
 module github.com/hollowdll/go-grpc-microservices/services/inventory
 
-go 1.22
+go 1.18
 
 toolchain go1.24.1
 
