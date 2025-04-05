@@ -76,9 +76,11 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/payment-service:latest
 
       # Déployer sur Kubernetes (si nécessaire)
-      - name: Deploy to Kubernetes
+      # Déployer sur Docker
+      - name: Deploy to Docker
         run: |
-          kubectl apply -f k8s/inventory/deployment.yaml
-          kubectl apply -f k8s/order/deployment.yaml
-          kubectl apply -f k8s/payment/deployment.yaml
-          kubectl apply -f k8s/postgres/deployment.yaml
+          ./deploy.sh  # Exécute le script de déploiement
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
