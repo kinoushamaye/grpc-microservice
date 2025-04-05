@@ -15,6 +15,9 @@ jobs:
       # Checkout du code source
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Check Go version
+        run: go version
+
 
       # Set up Go environment
       - name: Set up Go
