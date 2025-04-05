@@ -1,6 +1,6 @@
 module github.com/hollowdll/go-grpc-microservices/services/order
 
-go 1.18
+go 1.19
 
 
 require (
