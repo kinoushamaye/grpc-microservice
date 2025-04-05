@@ -2,8 +2,6 @@ module github.com/hollowdll/go-grpc-microservices/services/payment
 
 go 1.18
 
-toolchain go1.24.1
-
 require (
 	github.com/google/uuid v1.6.0
 	github.com/hollowdll/grpc-microservices-proto/gen/golang/paymentpb v1.0.0
