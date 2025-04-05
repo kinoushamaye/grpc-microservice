@@ -1,0 +1,10 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: 'otel-collector'
+    static_configs:
+      - targets: ['otel-collector:4317']
+  - job_name: 'services'
+    static_configs:
+      - targets: ['order:9002', 'payment:9000', 'inventory:9001']
