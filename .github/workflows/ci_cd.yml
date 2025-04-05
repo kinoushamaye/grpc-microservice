@@ -12,64 +12,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # Checkout du code source
-      - name: Checkout code
+      - name: Check out repository
         uses: actions/checkout@v2
-      - name: Check Go version
-        run: go version
 
-
-      # Set up Go environment
-      - name: Set up Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: '1.22'
-
-      # Installer les dépendances Go
-      - name: Install dependencies
+      - name: Log in to Docker Hub
         run: |
-          cd services/inventory
-          go mod tidy
-          cd ../order
-          go mod tidy
-          cd ../payment
-          go mod tidy
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
-      # Exécuter les tests
-      - name: Run tests
+      - name: Build and push Docker images
         run: |
-          cd services/inventory
-          go test ./...
-          cd ../order
-          go test ./...
-          cd ../payment
-          go test ./...
-
-      # Build Docker images pour chaque service
-      - name: Build Docker images
-        run: |
-          cd services/inventory
-          docker build -t inventory-service .
-          cd ../order
-          docker build -t order-service .
-          cd ../payment
-          docker build -t payment-service .
-
-      # Push Docker images to Docker Hub (ou un autre registry)
-      - name: Push Docker images to Docker Hub
-        run: |
-          echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-          docker tag inventory-service $DOCKER_USERNAME/inventory-service:latest
-          docker tag order-service $DOCKER_USERNAME/order-service:latest
-          docker tag payment-service $DOCKER_USERNAME/payment-service:latest
-          docker push $DOCKER_USERNAME/inventory-service:latest
-          docker push $DOCKER_USERNAME/order-service:latest
-          docker push $DOCKER_USERNAME/payment-service:latest
-
-      # Déployer sur Kubernetes (si nécessaire)
-      - name: Deploy to Kubernetes
-        run: |
-          kubectl apply -f k8s/inventory/deployment.yaml
-          kubectl apply -f k8s/order/deployment.yaml
-          kubectl apply -f k8s/payment/deployment.yaml
-          kubectl apply -f k8s/postgres/deployment.yaml
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/inventory-service .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/order-service .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/payment-service .
+          docker push ${{ secrets.DOCKER_USERNAME }}/inventory-service:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/order-service:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/payment-service:latest
