@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service: [ user, product, order ]  # liste les microservices
+        services: [ inventory, order, payment ] 
 
     steps:
     - name: Checkout repository
