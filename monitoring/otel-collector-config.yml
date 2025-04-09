@@ -5,11 +5,16 @@ receivers:
       http:
 
 exporters:
+  logging:
+    loglevel: debug
+  otlphttp:
+    endpoint: https://otlp-gateway-prod-us-central1.grafana.net/otlp
+    headers:
+      authorization: Basic <BASE64_ENCODED_API_KEY>
   jaeger:
-    endpoint: jaeger:14250
-    insecure: true
-  prometheus:
-    endpoint: \"0.0.0.0:8889\"
+    endpoint: "jaeger:14250"
+    tls:
+      insecure: true
 
 processors:
   batch:
@@ -19,8 +24,12 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [jaeger]
+      exporters: [otlphttp, jaeger]
     metrics:
       receivers: [otlp]
       processors: [batch]
-      exporters: [prometheus]
+      exporters: [otlphttp]
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlphttp]
