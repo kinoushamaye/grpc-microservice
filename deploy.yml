@@ -32,7 +32,7 @@ jobs:
       # 4. Récupérer les credentials du cluster EKS
       - name: Update kubeconfig
         run: |
-          aws eks update-kubeconfig --region us-east-2 --name kine-cluster
+          aws eks update-kubeconfig --region us-east-2 --name Anta-cluster
 
       # 5. Déployer les ressources Kubernetes
       - name: Deploy to EKS
